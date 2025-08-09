@@ -41,8 +41,8 @@ if DEBUG:
     frontend_url = "http://localhost:3000"
     CORS_ALLOW_ALL_ORIGINS = True
 else:
-    SITE_DOMAIN = 'https://imhotepchef.pythonanywhere.com' 
-    frontend_url = "https://imhotepchef.vercel.app"
+    SITE_DOMAIN = 'https://pharaohfolio.pythonanywhere.com' 
+    frontend_url = "https://pharaohfolio.vercel.app"
     # Security settings - keep these as they are
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -243,16 +243,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://yourfrontend.vercel.app",
-    "https://imhotepchef.pythonanywhere.com",
+    "https://pharaohfolio.vercel.app",
+    "https://pharaohfolio.pythonanywhere.com",
 ]
 
 # CORS settings for development
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://yourfrontend.vercel.app",
-    "https://imhotepchef.pythonanywhere.com",
+    "https://pharaohfolio.vercel.app",
+    "https://pharaohfolio.pythonanywhere.com",
 ]
 
 # Add logging configuration
