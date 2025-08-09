@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your New Email Address - ImhotepChef</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 25%, #6d28d9 50%, #5b21b6 75%, #4c1d95 100%);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        /* Floating decorative elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .float-element {
+            position: absolute;
+            border-radius: 50%;
+            mix-blend-mode: multiply;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .float-1 {
+            top: 15%;
+            left: 15%;
+            width: 100px;
+            height: 100px;
+            background: #a78bfa;
+            animation-delay: 0s;
+        }
+        
+        .float-2 {
+            top: 25%;
+            right: 15%;
+            width: 70px;
+            height: 70px;
+            background: #8b5cf6;
+            animation-delay: 2s;
+        }
+        
+        .float-3 {
+            bottom: 25%;
+            left: 25%;
+            width: 140px;
+            height: 140px;
+            background: #7c3aed;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .container {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 3rem 2.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .logo-placeholder {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #8b5cf6, #5b21b6);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        
+        .logo-placeholder::before {
+            content: "🍳";
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8b5cf6, #5b21b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            font-family: 'Georgia', serif;
+        }
+        
+        .tagline {
+            color: #6b7280;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .icon {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+        
+        .icon::before {
+            content: "📧";
+            font-size: 1.8rem;
+        }
+        h1 {
+            color: #374151;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Georgia', serif;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+        
+        .email-highlight {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            padding: 0.75rem 1.25rem;
+            border-radius: 12px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            color: #3730a3;
+            font-weight: 600;
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+        }
+        
+        .button-container {
+            text-align: center;
+            margin: 2.5rem 0;
+        }
+        
+        .button {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b5cf6, #5b21b6);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(139, 92, 246, 0.5);
+        }
+        
+        .link-fallback {
+            background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .link-text {
+            word-break: break-all;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            color: #374151;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .security-notice {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1.5rem 0;
+            border: 2px solid rgba(245, 158, 11, 0.2);
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+        }
+        
+        .footer {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(139, 92, 246, 0.1);
+            text-align: center;
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-left: -2.5rem;
+            margin-right: -2.5rem;
+            margin-bottom: -3rem;
+        }
+        
+        .footer p {
+            font-size: 0.9rem;
+            color: #78716c;
+            margin-bottom: 0.5rem;
+        }
+        
+        .support-info {
+            color: #7c2d12;
+            font-weight: 600;
+        }
+        
+        /* Mobile responsiveness */
+        @media only screen and (max-width: 640px) {
+            body {
+                padding: 20px 10px;
+            }
+            .container {
+                padding: 2rem 1.5rem;
+                border-radius: 12px;
+            }
+            h1 {
+                font-size: 1.75rem;
+            }
+            .logo {
+                font-size: 1.75rem;
+            }
+            .icon {
+                width: 3rem;
+                height: 3rem;
+                font-size: 1.5rem;
+            }
+            .button {
+                padding: 0.875rem 1.5rem;
+                font-size: 0.95rem;
+            }
+        }
+        
+        @media only screen and (max-width: 480px) {
+            .container {
+                padding: 1.5rem 1rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">ImhotepChef</div>
+            <div class="icon">📧</div>
+        </div>
+        
+        <h1>Verify Your New Email Address</h1>
+        
+        <p class="subtitle">
+            Hi {{ user.first_name|default:user.username }}, we need to verify your new email address to complete your profile update.
+        </p>
+        
+        <p>You've requested to change your email address to:</p>
+        <div class="email-highlight">{{ new_email }}</div>
+        
+        <p>To confirm this change and verify your new email address, please click the button below:</p>
+        
+        <div class="button-container">
+            <a href="{{ verification_url }}" class="button">
+                Verify New Email Address
+            </a>
+        </div>
+        
+        <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+        <div class="link-fallback">
+            <div class="link-text">
+                {{ verification_url }}
+            </div>
+        </div>
+        
+        <div class="security-notice">
+            <strong>Security Notice:</strong>
+            <ul>
+                <li>This verification link will expire in 24 hours for security reasons</li>
+                <li>If you didn't request this email change, please ignore this email and contact support immediately</li>
+                <li>Your current email address will remain active until this verification is completed</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>If you didn't request this email change, please contact our support team immediately.</p>
+            <p class="support-info">Need help? Contact us at <strong>support@imhotepchef.com</strong></p>
+            <p style="margin-top: 1rem; font-size: 0.8rem;">© 2024 ImhotepChef. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
