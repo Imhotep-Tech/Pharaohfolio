@@ -63,7 +63,7 @@ def login_view(request):
             else:
                 # Send verification email
                 try:
-                    mail_subject = 'Activate your ImhotepChef account'
+                    mail_subject = 'Activate your Pharaohfolio account'
                     current_site = SITE_DOMAIN.rstrip('/')
                     message = render_to_string('activate_mail_send.html', {
                         'user': user,
