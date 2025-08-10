@@ -33,14 +33,14 @@ services:
 
   frontend:
     build:
-      context: ./frontend/Pharaohfolio
+      context: ./frontend/pharaohfolio
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       - VITE_API_URL=http://localhost:8000
     volumes:
-      - ./frontend/Pharaohfolio:/app
+      - ./frontend/pharaohfolio:/app
       - /app/node_modules
     depends_on:
       - backend
