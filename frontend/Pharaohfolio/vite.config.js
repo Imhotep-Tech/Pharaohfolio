@@ -5,10 +5,31 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // Allow external connections
+    host: '0.0.0.0',
     port: 3000,
-    watch: {
-      usePolling: true, // Enable polling for file changes in Docker
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'http://localhost:8000',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api')
+      },
     },
   },
+  build: {
+    rollupOptions: {
+      external: [],
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          auth: ['axios'],
+        },
+      },
+    },
+  },
+  // Ensure service worker and manifest are copied correctly
+  publicDir: 'public',
+  define: {
+    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL)
+  }
 })
