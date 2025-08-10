@@ -6,8 +6,12 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
+from . import views
 
 urlpatterns = [
+
+    path('user-data/', views.user_view, name='user_data'),
+
     # Authentication endpoints
     path('auth/login/', login.login_view, name='login'),
     path('auth/logout/', logout.logout_view, name='logout'),
