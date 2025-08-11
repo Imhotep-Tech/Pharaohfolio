@@ -12,6 +12,7 @@ import EmailVerification from './components/auth/EmailVerification'
 import GoogleCallback from './components/auth/GoogleCallback'
 import Profile from './components/profile/Profile'
 import EmailChangeVerification from './components/profile/EmailChangeVerification'
+import PublicPortfolio from './components/main/PublicPortfolio'
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
               path="/verify-email-change/:uid/:token/:new_email" 
               element={<EmailChangeVerification />} 
             />
+            <Route path="/u/:username" element={<PublicPortfolio />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

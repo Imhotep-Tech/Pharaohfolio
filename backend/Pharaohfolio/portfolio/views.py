@@ -166,3 +166,16 @@ def csp_report(request):
         logger.error(f"CSP report error: {e}")
         return Response({'error': 'Failed to process report'}, status=500)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def public_portfolio(request, username):
+    try:
+        user = User.objects.filter(username=username).first()
+        if not user:
+            return Response({'error': 'User not found'}, status=404)
+        portfolio = Portfolio.objects.filter(user=user).first()
+        if not portfolio or not portfolio.user_code:
+            return Response({'error': 'Portfolio not found'}, status=404)
+        return Response({'user_code': portfolio.user_code})
+    except Exception as e:
+        return Response({'error': f'An error occurred: {str(e)}'}, status=500)
