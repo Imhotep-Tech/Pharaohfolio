@@ -10,7 +10,9 @@ import hashlib
 import re
 import json
 import logging
-from Pharaohfolio.settings import frontend_url
+from Pharaohfolio.settings import SITE_DOMAIN, frontend_url
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
@@ -115,8 +117,17 @@ def code_operation(request):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
 
-            #TODO: add in here an email sending with the new info and the URL and all of the info
-        
+            # Send email: Portfolio Published
+            try:
+                mail_subject = 'Your Pharaohfolio Portfolio is Published!'
+                message = render_to_string('portfolio_published_email.html', {
+                    'user': user,
+                    'frontend_url': frontend_url,
+                    'portfolio_url': f"{frontend_url}/{user.username}",
+                })
+                send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
+            except Exception as email_error:
+                print(f"Failed to send portfolio published email: {str(email_error)}")
         else:
             existing_portfolio = Portfolio.objects.get(user=user)
             # Update the user code
@@ -129,8 +140,17 @@ def code_operation(request):
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
 
-            #TODO: add in here an email sending with the new info and the URL and all of the info
-
+            # Send email: Portfolio Updated
+            try:
+                mail_subject = 'Your Pharaohfolio Portfolio Has Been Updated'
+                message = render_to_string('portfolio_updated_email.html', {
+                    'user': user,
+                    'frontend_url': frontend_url,
+                    'portfolio_url': f"{frontend_url}/u/{user.username}",
+                })
+                send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
+            except Exception as email_error:
+                print(f"Failed to send portfolio updated email: {str(email_error)}")
 
         return Response(
             {'message': f'User Portfolio Saved Successfully you can access it at {frontend_url}/{user.username}'}, 
