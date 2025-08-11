@@ -125,59 +125,8 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Modal for Code Editor */}
-        {editorOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative">
-              <button
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
-                onClick={() => setEditorOpen(false)}
-                aria-label="Close editor"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">Portfolio Editor</h2>
-              <p className="text-gray-600 mb-4 text-sm">
-                Paste your HTML, CSS, and JavaScript code below. This will be your live portfolio.
-              </p>
-              {loading ? (
-                <div className="text-center py-12">Loading...</div>
-              ) : (
-                <CodeEditor
-                  value={portfolioCode}
-                  onChange={setPortfolioCode}
-                  language="html"
-                />
-              )}
-              <div className="flex justify-end mt-4 gap-2">
-                <button
-                  className="chef-button-secondary"
-                  onClick={() => setEditorOpen(false)}
-                  disabled={saving}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="chef-button bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
-                  onClick={handleSave}
-                  disabled={saving || loading}
-                >
-                  {saving ? 'Saving...' : 'Save & Deploy'}
-                </button>
-              </div>
-              {success && (
-                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded text-green-700 text-sm">{success}</div>
-              )}
-              {error && (
-                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">{error}</div>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* Portfolio Preview */}
+        {/*
         {portfolioCode && (
           <div className="chef-card rounded-2xl p-6 sm:p-8 shadow-lg border border-white/30 backdrop-blur-2xl bg-white/90 mt-8">
             <h2 className="text-xl font-bold mb-4 text-gray-800">Live Preview</h2>
@@ -185,10 +134,29 @@ const Dashboard = () => {
               <iframe
                 title="Portfolio Preview"
                 srcDoc={portfolioCode}
-                sandbox="allow-scripts allow-same-origin"
+                sandbox="allow-scripts"
                 className="w-full h-full border-0"
               />
             </div>
+          </div>
+        )}
+        */}
+
+        {/* Instead, show a link to the user's portfolio page after saving: */}
+        {portfolioCode && (
+          <div className="chef-card rounded-2xl p-6 sm:p-8 shadow-lg border border-white/30 backdrop-blur-2xl bg-white/90 mt-8 text-center">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">Your Portfolio is Live!</h2>
+            <a
+              href={`/u/${user?.username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg font-semibold shadow-lg hover:from-purple-600 hover:to-indigo-600 transition"
+            >
+              View Your Portfolio
+            </a>
+            <p className="text-gray-500 text-sm mt-4">
+              Share this link: <span className="font-mono">{`pharaohfolio.vercel.app/u/${user?.username}`}</span>
+            </p>
           </div>
         )}
 
@@ -211,6 +179,59 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+
+      {/* Modal for Code Editor */}
+      {editorOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative">
+            <button
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700"
+              onClick={() => setEditorOpen(false)}
+              aria-label="Close editor"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <h2 className="text-2xl font-bold mb-4 text-gray-800">Portfolio Editor</h2>
+            <p className="text-gray-600 mb-4 text-sm">
+              Paste your HTML, CSS, and JavaScript code below. This will be your live portfolio.
+            </p>
+            {loading ? (
+              <div className="text-center py-12">Loading...</div>
+            ) : (
+              <CodeEditor
+                value={portfolioCode}
+                onChange={setPortfolioCode}
+                language="html"
+              />
+            )}
+            <div className="flex justify-end mt-4 gap-2">
+              <button
+                className="chef-button-secondary"
+                onClick={() => setEditorOpen(false)}
+                disabled={saving}
+              >
+                Cancel
+              </button>
+              <button
+                className="chef-button bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
+                onClick={handleSave}
+                disabled={saving || loading}
+              >
+                {saving ? 'Saving...' : 'Save & Deploy'}
+              </button>
+            </div>
+            {success && (
+              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded text-green-700 text-sm">{success}</div>
+            )}
+            {error && (
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">{error}</div>
+            )}
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
