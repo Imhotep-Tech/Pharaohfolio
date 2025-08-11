@@ -181,10 +181,11 @@ const Profile = () => {
         <div className="chef-card rounded-2xl p-2 shadow-lg border border-white/30 backdrop-blur-2xl bg-white/90">
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
             <button
-              className={`chef-button flex-1 ${activeTab === 'profile' 
-                ? 'bg-chef-gradient text-white' 
-                : 'bg-white/70 text-gray-700 hover:bg-white/90 border border-gray-300'
-              } flex items-center space-x-2 justify-center`}
+              className={`chef-button flex-1 ${
+                activeTab === 'profile'
+                  ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow-lg scale-105'
+                  : 'bg-white/70 text-gray-700 hover:bg-white/90 border border-gray-300'
+              } flex items-center space-x-2 justify-center transition-all duration-200`}
               onClick={() => setActiveTab('profile')}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -193,10 +194,11 @@ const Profile = () => {
               <span>Profile Information</span>
             </button>
             <button
-              className={`chef-button flex-1 ${activeTab === 'password' 
-                ? 'bg-chef-gradient text-white' 
-                : 'bg-white/70 text-gray-700 hover:bg-white/90 border border-gray-300'
-              } flex items-center space-x-2 justify-center`}
+              className={`chef-button flex-1 ${
+                activeTab === 'password'
+                  ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-lg scale-105'
+                  : 'bg-white/70 text-gray-700 hover:bg-white/90 border border-gray-300'
+              } flex items-center space-x-2 justify-center transition-all duration-200`}
               onClick={() => setActiveTab('password')}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,10 +351,11 @@ const Profile = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`chef-button w-full ${loading 
-                    ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-chef-gradient hover:shadow-lg'
-                  } text-white flex items-center space-x-2 justify-center`}
+                  className={`chef-button w-full ${
+                    loading
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 hover:shadow-lg'
+                  } text-white flex items-center space-x-2 justify-center transition-all duration-200`}
                 >
                   {loading ? (
                     <>

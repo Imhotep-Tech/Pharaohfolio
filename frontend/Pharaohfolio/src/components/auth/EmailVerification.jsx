@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import ImhotepChefLogo from '../../assets/ImhotepChef.png';
-import Footer from '../common/Footer';
 
 const EmailVerification = () => {
   const { uid, token } = useParams();
@@ -284,7 +283,6 @@ const EmailVerification = () => {
           </p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
