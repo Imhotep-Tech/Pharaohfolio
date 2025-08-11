@@ -13,6 +13,7 @@ import GoogleCallback from './components/auth/GoogleCallback'
 import Profile from './components/profile/Profile'
 import EmailChangeVerification from './components/profile/EmailChangeVerification'
 import PublicPortfolio from './components/main/PublicPortfolio'
+import PromptExamples from './components/main/PromptExamples'
 
 function App() {
   return (
@@ -73,6 +74,14 @@ function App() {
                   <Profile />
                 </ProtectedRoute>
               } 
+            />
+            <Route
+             path="/prompts"
+              element={
+                <ProtectedRoute>
+                  <PromptExamples />
+                </ProtectedRoute>
+            }
             />
             <Route 
               path="/verify-email-change/:uid/:token/:new_email" 

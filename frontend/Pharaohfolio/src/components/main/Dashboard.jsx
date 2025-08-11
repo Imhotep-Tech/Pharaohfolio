@@ -168,13 +168,38 @@ const Dashboard = () => {
                 Get Started in 3 Steps
               </h3>
               <ol className="text-left text-gray-700 space-y-2 mb-4">
-                <li><b>1.</b> Ask any AI assistant: <span className="italic">"Create me a portfolio website for a web developer with HTML, CSS, and JavaScript on one file."</span></li>
+                <li><b>1.</b> Ask any AI assistant: <span className="italic">"Create me a portfolio website for a web developer with HTML, CSS, and JavaScript on one file. <b>Do not use images or external links except for images from https://i.imgur.com/ or https://live.staticflickr.com/. Do not use navigation bars or navigation links.</b>"</span></li>
                 <li><b>2.</b> Paste the generated code into the editor.</li>
                 <li><b>3.</b> Click <b>Save & Deploy</b> to publish your portfolio instantly!</li>
               </ol>
               <p className="text-gray-500 text-sm">
                 Your portfolio will be live at <b>pharaohfolio.com/yourusername</b>
               </p>
+            </div>
+            {/* Security Notice */}
+            <div className="mt-4 mb-2 p-3 bg-yellow-50 border border-yellow-200 rounded text-yellow-800 text-xs text-left">
+              <b>Security Notice:</b> For your safety, <b>only &lt;img&gt; tags with src from <span className="underline">https://i.imgur.com/</span> or <span className="underline">https://live.staticflickr.com/</span> are allowed</b>. 
+              All other images and all navigation bars/links will be removed. You may use <b>&lt;a&gt;</b> tags for external links. 
+              To add images, upload them to <a href="https://imgur.com/upload" target="_blank" rel="noopener noreferrer" className="underline text-blue-700">imgur.com</a> or <a href="https://www.flickr.com/" target="_blank" rel="noopener noreferrer" className="underline text-blue-700">flickr.com</a> and use the direct image link (starts with <span className="underline">https://i.imgur.com/</span> or <span className="underline">https://live.staticflickr.com/</span>).
+              <br />
+              <b>Navigation bars and navigation links are not allowed and will be removed for security.</b>
+            </div>
+            {/* Prompt Examples */}
+            <div className="mt-8">
+              <h4 className="text-lg font-semibold text-gray-800 mb-2">Prompt Examples for AI</h4>
+              <ul className="space-y-2 text-left text-gray-700 text-sm">
+                <PromptExample text={`Create a personal portfolio website for a frontend developer named Sarah, with a modern design, a hero section, about, projects, and contact form. Use HTML, CSS, and JavaScript in one file. For images, use only links from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Generate a single-file HTML/CSS/JS portfolio for a graphic designer named Alex, with a gallery section (use imgur or flickr images), animated transitions, and a dark theme. Only use images from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Build a responsive portfolio page for a data scientist named Priya, including sections for bio, skills, projects (with charts using only CSS/HTML), and contact info. Use only HTML, CSS, and JavaScript. Images must be from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Create a one-page resume website for a backend engineer named Ahmed, with a timeline of experience, skills, and a downloadable CV button. Use HTML, CSS, and JavaScript in one file. Images only from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Make a creative portfolio for a photographer named Emily, with a fullscreen color slider, about section, and contact form. Use imgur or flickr images only (https://i.imgur.com/ or https://live.staticflickr.com/). Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Design a portfolio for a UI/UX designer named Lucas, with a case studies section, testimonials, and a minimal, clean layout. Use HTML, CSS, and JavaScript in one file. Images only from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Create a personal landing page for a student named Maria, with sections for education, projects, and social links (as text or <a> tags). Use only HTML, CSS, and JavaScript. Images only from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Build a portfolio for a mobile app developer named John, featuring app screenshots as imgur images, skills, and a contact form. All code in one HTML file. Images only from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
+              </ul>
+              <div className="text-xs text-gray-400 mt-2">
+                Click the copy icon to use a prompt with your favorite AI!
+              </div>
             </div>
           </div>
         )}
@@ -236,5 +261,28 @@ const Dashboard = () => {
     </div>
   );
 };
+
+// Add this helper component at the bottom of the file (before export)
+function PromptExample({ text }) {
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text);
+  };
+  return (
+    <li className="flex items-start gap-2">
+      <span className="flex-1">{text}</span>
+      <button
+        onClick={handleCopy}
+        title="Copy prompt"
+        className="ml-2 text-gray-400 hover:text-purple-600 transition"
+        style={{ minWidth: 24 }}
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" />
+          <rect x="3" y="3" width="13" height="13" rx="2" stroke="currentColor" />
+        </svg>
+      </button>
+    </li>
+  );
+}
 
 export default Dashboard;

@@ -46,21 +46,21 @@ DANGEROUS_ATTRIBUTES = [
 ]
 
 def sanitize_portfolio_code(code):
-    """Enhanced sanitization for XSS prevention with CSP compliance"""
+    """Enhanced sanitization for XSS prevention with CSP compliance and imgur/flickr-only images"""
     # Remove dangerous event handlers
     for attr in DANGEROUS_ATTRIBUTES:
         pattern = re.compile(rf'{attr}\s*=\s*["\'][^"\']*["\']', re.IGNORECASE)
         code = pattern.sub('', code)
-    
+
     # Remove javascript: protocols
     js_protocol_pattern = re.compile(r'javascript\s*:', re.IGNORECASE)
     code = js_protocol_pattern.sub('', code)
-    
+
     # Remove data: URLs for scripts (but allow for images)
     data_script_pattern = re.compile(r'src\s*=\s*["\']data:[^"\']*script[^"\']*["\']', re.IGNORECASE)
     code = data_script_pattern.sub('', code)
-    
-    # Basic bleach sanitization
+
+    # Bleach sanitization (allow <img> with src, but filter src below)
     sanitized = bleach.clean(
         code,
         tags=ALLOWED_TAGS + ['script'],
@@ -69,7 +69,20 @@ def sanitize_portfolio_code(code):
         strip=True,
         strip_comments=False
     )
-    
+
+    # Allow only <img> tags with src from imgur or flickr direct CDN
+    def is_allowed_img_src(src):
+        return (
+            src.startswith('https://i.imgur.com/')
+            or src.startswith('https://live.staticflickr.com/')
+        )
+
+    # Remove all <img> tags not from allowed sources
+    sanitized = re.sub(
+        r'<img\b([^>]*?)src=["\'](?!https://i\.imgur\.com/|https://live\.staticflickr\.com/)[^"\']*["\']([^>]*?)>',
+        '', sanitized, flags=re.IGNORECASE
+    )
+
     return sanitized
 
 # Create your views here.

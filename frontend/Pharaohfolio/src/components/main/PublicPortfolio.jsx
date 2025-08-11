@@ -7,6 +7,17 @@ const PublicPortfolio = () => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [pageTitle, setPageTitle] = useState('Pharaohfolio');
+
+  // Extract <title> from HTML string
+  const extractTitle = (html, fallback) => {
+    if (!html) return fallback;
+    const match = html.match(/<title>(.*?)<\/title>/i);
+    if (match && match[1]) {
+      return match[1].trim();
+    }
+    return fallback;
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -16,15 +27,24 @@ const PublicPortfolio = () => {
         if (res.data?.user_code) {
           setCode(res.data.user_code || '');
           setError('');
+          // Set page title from HTML <title> or username or fallback
+          const title = extractTitle(res.data.user_code, username || 'Pharaohfolio');
+          setPageTitle(title);
+          document.title = title;
         } else {
           setError(res.data.error || 'Portfolio not found');
+          setPageTitle('Pharaohfolio');
+          document.title = 'Pharaohfolio';
         }
         setLoading(false);
       })
       .catch(() => {
         setError('Failed to load portfolio');
+        setPageTitle('Pharaohfolio');
+        document.title = 'Pharaohfolio';
         setLoading(false);
       });
+    // eslint-disable-next-line
   }, [username]);
 
   if (loading) {
@@ -48,7 +68,7 @@ const PublicPortfolio = () => {
   return (
     <div className="min-h-screen bg-gray-100 relative">
       <iframe
-        title={`${username}'s Portfolio`}
+        title={pageTitle}
         srcDoc={code}
         sandbox="allow-scripts"
         className="w-full min-h-screen border-0"
