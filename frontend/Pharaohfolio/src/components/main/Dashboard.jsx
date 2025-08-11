@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import Footer from '../common/Footer';
 import ImhotepChefLogo from '../../assets/ImhotepChef.png';
-import CodeEditor from '../CodeEditor';
+import CodeEditor from './components/CodeEditor';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -14,16 +14,36 @@ const Dashboard = () => {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
-  // Fetch portfolio code on mount or when editor opens
+  // Fetch portfolio code once on mount
+  useEffect(() => {
+    axios
+      .get('/api/portfolio/my/get/')
+      .then(res => {
+        if (res.data?.user_code_status) {
+          setPortfolioCode(res.data.user_code || '');
+        } else {
+          setPortfolioCode('');
+        }
+      })
+      .catch(() => {
+        setPortfolioCode('');
+      });
+  }, []);
+
+  // Fetch portfolio code again every time editorOpen changes to true
   useEffect(() => {
     if (editorOpen) {
       setLoading(true);
       setError('');
       setSuccess('');
       axios
-        .get('/api/portfolio/my/') //get
+        .get('/api/portfolio/my/get/')
         .then(res => {
-          setPortfolioCode(res.data?.user_code || '');
+          if (res.data?.user_code_status) {
+            setPortfolioCode(res.data.user_code || '');
+          } else {
+            setPortfolioCode('');
+          }
         })
         .catch(() => {
           setPortfolioCode('');
@@ -36,22 +56,16 @@ const Dashboard = () => {
     setSaving(true);
     setError('');
     setSuccess('');
+    if (!portfolioCode || !portfolioCode.trim()) {
+      setError('Portfolio code cannot be empty.');
+      setSaving(false);
+      return;
+    }
     try {
-      // Try to update, if fails, create
-      await axios.put('/api/portfolio/my/', { user_code: portfolioCode }); //update
-      setSuccess('Portfolio updated successfully!');
+      await axios.post('/api/portfolio/save/', { user_code: portfolioCode });
+      setSuccess('Portfolio saved successfully!');
     } catch (err) {
-      // If not found, create new
-      if (err.response?.status === 404) {
-        try {
-          await axios.post('/api/portfolio/', { user_code: portfolioCode }); //Create
-          setSuccess('Portfolio created successfully!');
-        } catch (e) {
-          setError('Failed to save portfolio.');
-        }
-      } else {
-        setError('Failed to save portfolio.');
-      }
+      setError('Failed to save portfolio.');
     }
     setSaving(false);
   };
@@ -186,7 +200,7 @@ const Dashboard = () => {
                 Get Started in 3 Steps
               </h3>
               <ol className="text-left text-gray-700 space-y-2 mb-4">
-                <li><b>1.</b> Ask any AI assistant: <span className="italic">"Create me a portfolio website for a web developer with HTML, CSS, and JavaScript."</span></li>
+                <li><b>1.</b> Ask any AI assistant: <span className="italic">"Create me a portfolio website for a web developer with HTML, CSS, and JavaScript on one file."</span></li>
                 <li><b>2.</b> Paste the generated code into the editor.</li>
                 <li><b>3.</b> Click <b>Save & Deploy</b> to publish your portfolio instantly!</li>
               </ol>
