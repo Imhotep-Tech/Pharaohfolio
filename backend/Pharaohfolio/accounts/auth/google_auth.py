@@ -10,6 +10,8 @@ import requests
 from django.conf import settings
 from Pharaohfolio.settings import SITE_DOMAIN, GOOGLE_OAUTH2_CLIENT_ID, GOOGLE_OAUTH2_CLIENT_SECRET, frontend_url
 from decouple import config
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -115,7 +117,21 @@ def google_auth(request):
                 email_verify=True,
                 is_active=True
             )
-            
+
+            # Send welcome email
+            try:
+                mail_subject = 'Welcome to Pharaohfolio!'
+                message = render_to_string('welcome_email.html', {
+                    'user': user,
+                    'domain': SITE_DOMAIN.rstrip('/'),
+                    'frontend_url': frontend_url,
+                    'uid': user.pk,  # Not used for Google, but template expects it
+                    'token': '',     # Not used for Google, but template expects it
+                })
+                send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
+            except Exception as email_error:
+                print(f"Failed to send welcome email: {str(email_error)}")
+
             # Generate tokens and return
             refresh = RefreshToken.for_user(user)
             return Response({

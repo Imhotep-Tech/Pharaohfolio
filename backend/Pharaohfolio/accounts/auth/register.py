@@ -9,8 +9,6 @@ from django.utils.encoding import force_bytes, force_str
 from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
 from Pharaohfolio.settings import SITE_DOMAIN, frontend_url
-from django.core.exceptions import ValidationError
-from django.contrib.auth.password_validation import validate_password
 
 #the register route
 @api_view(['POST'])
@@ -151,6 +149,20 @@ def verify_email(request):
             user.is_active = True
             user.email_verify = True
             user.save()
+
+            # Send welcome email after verification
+            try:
+                mail_subject = 'Welcome to Pharaohfolio!'
+                message = render_to_string('welcome_email.html', {
+                    'user': user,
+                    'domain': SITE_DOMAIN.rstrip('/'),
+                    'frontend_url': frontend_url,
+                    'uid': user.pk,  # Not needed here, but template expects it
+                    'token': '',     # Not needed here, but template expects it
+                })
+                send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
+            except Exception as email_error:
+                print(f"Failed to send welcome email: {str(email_error)}")
             
             return Response(
                 {'message': 'Email verified successfully'}, 

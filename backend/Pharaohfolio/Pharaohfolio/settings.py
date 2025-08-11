@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
+    'csp',
     'accounts',
     'portfolio'
 ]
@@ -123,6 +124,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'Pharaohfolio.urls'
@@ -292,3 +294,48 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': ['profile', 'email'],
     }
 }
+
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": ("'self'",),
+        "script-src": (
+            "'self'",
+            "'unsafe-inline'",  # Remove if you want to block inline scripts
+            "https://cdnjs.cloudflare.com",
+            "https://cdn.jsdelivr.net",
+            "https://unpkg.com",
+        ),
+        "style-src": (
+            "'self'",
+            "'unsafe-inline'",
+            "https://fonts.googleapis.com",
+            "https://cdnjs.cloudflare.com",
+            "https://cdn.jsdelivr.net",
+        ),
+        "font-src": (
+            "'self'",
+            "https://fonts.gstatic.com",
+            "https://cdnjs.cloudflare.com",
+        ),
+        "img-src": (
+            "'self'",
+            "data:",
+            "blob:",
+            "https:",
+        ),
+        "connect-src": (
+            "'self'",
+            frontend_url,
+            "https://api.github.com",
+        ),
+        "frame-ancestors": ("'none'",),
+        "base-uri": ("'self'",),
+        "object-src": ("'none'",),
+    }
+}
+
+# Use report-only mode in development
+if DEBUG:
+    CONTENT_SECURITY_POLICY_REPORT_ONLY = CONTENT_SECURITY_POLICY
+else:
+    CONTENT_SECURITY_POLICY_REPORT_ONLY = None
