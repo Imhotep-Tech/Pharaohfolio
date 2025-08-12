@@ -123,7 +123,7 @@ def code_operation(request):
                 message = render_to_string('portfolio_published_email.html', {
                     'user': user,
                     'frontend_url': frontend_url,
-                    'portfolio_url': f"{frontend_url}/{user.username}",
+                    'portfolio_url': f"{frontend_url}/u/{user.username}",
                 })
                 send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
             except Exception as email_error:
@@ -141,16 +141,17 @@ def code_operation(request):
                 )
 
             # Send email: Portfolio Updated
-            try:
-                mail_subject = 'Your Pharaohfolio Portfolio Has Been Updated'
-                message = render_to_string('portfolio_updated_email.html', {
-                    'user': user,
-                    'frontend_url': frontend_url,
-                    'portfolio_url': f"{frontend_url}/u/{user.username}",
-                })
-                send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
-            except Exception as email_error:
-                print(f"Failed to send portfolio updated email: {str(email_error)}")
+            #! Removed for now because it's sending a lot of emails if a user updates it multiple times in row and it slows down
+            # try:
+            #     mail_subject = 'Your Pharaohfolio Portfolio Has Been Updated'
+            #     message = render_to_string('portfolio_updated_email.html', {
+            #         'user': user,
+            #         'frontend_url': frontend_url,
+            #         'portfolio_url': f"{frontend_url}/u/{user.username}",
+            #     })
+            #     send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
+            # except Exception as email_error:
+            #     print(f"Failed to send portfolio updated email: {str(email_error)}")
 
         return Response(
             {'message': f'User Portfolio Saved Successfully you can access it at {frontend_url}/{user.username}'}, 

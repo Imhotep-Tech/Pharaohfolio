@@ -173,7 +173,7 @@ const Dashboard = () => {
                 <li><b>3.</b> Click <b>Save & Deploy</b> to publish your portfolio instantly!</li>
               </ol>
               <p className="text-gray-500 text-sm">
-                Your portfolio will be live at <b>pharaohfolio.com/yourusername</b>
+                Your portfolio will be live at <b>pharaohfolio.com/u/yourusername</b>
               </p>
             </div>
             {/* Security Notice */}
