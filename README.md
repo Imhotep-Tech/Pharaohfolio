@@ -63,7 +63,7 @@ Ask any AI assistant like ChatGPT:
 Copy the generated HTML, CSS, and JavaScript code and paste it into Pharaohfolio's editor.
 
 ### 🚀 Step 3: Get Your Link
-Hit "Deploy" and get your instant live link: `pharaohfolio.vercel.app/yourusername`
+Hit "Deploy" and get your instant live link: `pharaohfolio.vercel.app/u/yourusername`
 
 ### ✨ Step 4: Share & Shine
 Share your professional portfolio with clients, employers, or friends!

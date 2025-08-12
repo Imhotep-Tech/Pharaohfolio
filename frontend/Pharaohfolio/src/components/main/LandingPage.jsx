@@ -206,7 +206,7 @@ function LandingPage() {
                   step: "3",
                   icon: "🌐",
                   title: "Get Your Link",
-                  description: "Your portfolio is live at pharaohfolio.com/yourusername. Share it instantly!"
+                  description: "Your portfolio is live at pharaohfolio.com/u/yourusername. Share it instantly!"
                 }
               ].map((item, index) => (
                 <div key={index} className="text-center">
