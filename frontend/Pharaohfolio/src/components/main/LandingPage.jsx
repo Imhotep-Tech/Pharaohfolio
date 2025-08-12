@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../common/Footer';
-import ImhotepChefLogo from '../../assets/ImhotepChef.png';
+import PharaohfolioLogo from '../../assets/PharaohfolioLogo.png';
 
 function LandingPage() {
   const [currentFeature, setCurrentFeature] = useState(0);
@@ -55,8 +55,8 @@ function LandingPage() {
             <div className="text-center mb-16">
               <div className="inline-block p-4 bg-white rounded-full mb-6 shadow-2xl transform hover:scale-105 transition-all duration-300 border border-gray-100">
                 <img 
-                  src={ImhotepChefLogo} 
-                  alt="ImhotepChef Logo" 
+                  src={PharaohfolioLogo} 
+                  alt="Pharaohfolio Logo" 
                   className="w-16 h-16 object-contain"
                 />
               </div>
@@ -242,8 +242,8 @@ function LandingPage() {
             <div className="chef-card bg-white/80 backdrop-blur-sm p-12 rounded-3xl shadow-2xl border border-orange-100">
               <div className="flex justify-center mb-6">
                 <img 
-                  src={ImhotepChefLogo} 
-                  alt="ImhotepChef Logo" 
+                  src={PharaohfolioLogo} 
+                  alt="Pharaohfolio Logo" 
                   className="w-20 h-20 object-contain"
                 />
               </div>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../common/Footer';
-import ImhotepChefLogo from '../../assets/ImhotepChef.png';
+import PharaohfolioLogo from '../../assets/PharaohfolioLogo.png';
 
 const ResetPassword = () => {
   const [formData, setFormData] = useState({
@@ -364,8 +364,8 @@ const ResetPassword = () => {
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full mb-4 shadow-lg border-4 border-white">
                 <img 
-                  src={ImhotepChefLogo} 
-                  alt="ImhotepChef Logo" 
+                  src={PharaohfolioLogo} 
+                  alt="Pharaohfolio Logo" 
                   className="w-14 h-14 object-contain"
                 />
               </div>

@@ -1,7 +1,7 @@
 //The main purpose of this file is to redirect the authorized uses from this route automatically to there dashboard
 import { useAuth } from '../contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
-import ImhotepChefLogo from '../assets/ImhotepChef.png';
+import PharaohfolioLogo from '../assets/PharaohfolioLogo.png';
 
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -19,8 +19,8 @@ const PublicRoute = ({ children }) => {
           <div className="chef-card rounded-3xl p-8 sm:p-12 shadow-2xl border border-white/30 backdrop-blur-2xl bg-white/90 text-center max-w-md w-full">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full mb-4 shadow-lg border-4 border-white mx-auto">
               <img 
-                src={ImhotepChefLogo} 
-                alt="ImhotepChef Logo" 
+                src={PharaohfolioLogo} 
+                alt="Pharaohfolio Logo" 
                 className="w-14 h-14 object-contain"
               />
             </div>

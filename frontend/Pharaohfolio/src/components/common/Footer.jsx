@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import ImhotepChefLogo from '../../assets/ImhotepChef.png';
+import PharaohfolioLogo from '../../assets/PharaohfolioLogo.png';
 
 function Footer() {
   return (
@@ -9,8 +9,8 @@ function Footer() {
           <div className="flex justify-center mb-4">
             <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full shadow-lg border-4 border-white">
               <img 
-                src={ImhotepChefLogo} 
-                alt="ImhotepChef Logo" 
+                src={PharaohfolioLogo} 
+                alt="Pharaohfolio Logo" 
                 className="w-10 h-10 object-contain"
               />
             </div>
@@ -28,7 +28,7 @@ function Footer() {
           <p className="text-indigo-200 text-sm mb-6">Simple Hosting for Single-Page Portfolios</p>
           <div className="flex justify-center space-x-6 text-sm text-indigo-200">
             <a href="https://imhoteptech.vercel.app/" className="hover:text-purple-300 transition-colors" target="_blank" rel="noopener noreferrer">Imhotep Tech</a>
-            <a href="https://github.com/Imhotep-Tech/ImhotepChef" className="hover:text-purple-300 transition-colors" target="_blank" rel="noopener noreferrer">Source Code</a>
+            <a href="https://github.com/Imhotep-Tech/Pharaohfolio" className="hover:text-purple-300 transition-colors" target="_blank" rel="noopener noreferrer">Source Code</a>
           </div>
           <div className="border-t border-indigo-800 mt-8 pt-8">
             <p className="text-indigo-400 text-xs">&copy; 2025 Pharaohfolio. All rights reserved.</p>
