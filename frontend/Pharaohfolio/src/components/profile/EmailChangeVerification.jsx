@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import ImhotepChefLogo from '../../assets/ImhotepChef.png';
+import PharaohfolioLogo from '../../assets/PharaohfolioLogo.png';
 
 const EmailChangeVerification = () => {
   const { uid, token, new_email } = useParams();
@@ -185,8 +185,8 @@ const EmailChangeVerification = () => {
           <div className="text-center mb-6">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full mb-4 shadow-lg border-4 border-white">
               <img 
-                src={ImhotepChefLogo} 
-                alt="ImhotepChef Logo" 
+                src={PharaohfolioLogo} 
+                alt="Pharaohfolio Logo" 
                 className="w-14 h-14 object-contain"
               />
             </div>

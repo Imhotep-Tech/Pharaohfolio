@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
-import ImhotepChefLogo from '../../assets/ImhotepChef.png';
+import PharaohfolioLogo from '../../assets/PharaohfolioLogo.png';
 
 const Navbar = ({ onToggle }) => {
   const { user, logout } = useAuth();
@@ -94,8 +94,8 @@ const Navbar = ({ onToggle }) => {
                 <div className="flex items-center justify-center mb-4">
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full shadow-lg border-4 border-white">
                     <img 
-                      src={ImhotepChefLogo} 
-                      alt="ImhotepChef Logo" 
+                      src={PharaohfolioLogo} 
+                      alt="Pharaohfolio Logo" 
                       className="w-12 h-12 object-contain"
                     />
                   </div>
