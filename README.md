@@ -1,6 +1,6 @@
 <div align="center">
 
-# 👑 Pharaohfolio (STILL IN DEVELOPMENT)
+# 👑 Pharaohfolio
 
 *Simple hosting for single-page portfolios — by Imhotep Tech*
 
