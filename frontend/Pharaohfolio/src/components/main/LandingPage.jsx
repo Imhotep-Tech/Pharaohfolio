@@ -21,7 +21,7 @@ function LandingPage() {
     {
       icon: "🌐",
       title: "Instant Hosting",
-      description: "Your portfolio goes live at pharaohfolio.com/username immediately"
+      description: "Your portfolio goes live at pharaohfolio.vercel.app/u/username immediately"
     },
     {
       icon: "💻",

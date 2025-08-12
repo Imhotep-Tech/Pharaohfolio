@@ -23,7 +23,7 @@
 
 🤖 **AI-Generated Code Support** - Works with any AI assistant (ChatGPT, Claude, Gemini, etc.)  
 📋 **Simple Paste & Deploy** - Just paste your HTML/CSS/JS code and get a live link  
-🌐 **Instant Hosting** - Your portfolio goes live at `pharaohfolio.com/username` immediately  
+🌐 **Instant Hosting** - Your portfolio goes live at `pharaohfolio.vercel.app/u/username` immediately  
 💻 **Built-in Code Editor** - Monaco editor for quick tweaks and customizations  
 👁️ **Live Preview** - See your portfolio in real-time as you edit  
 🔐 **Secure Authentication** - Email/password and Google OAuth for account management  
@@ -63,7 +63,7 @@ Ask any AI assistant like ChatGPT:
 Copy the generated HTML, CSS, and JavaScript code and paste it into Pharaohfolio's editor.
 
 ### 🚀 Step 3: Get Your Link
-Hit "Deploy" and get your instant live link: `pharaohfolio.com/yourusername`
+Hit "Deploy" and get your instant live link: `pharaohfolio.vercel.app/yourusername`
 
 ### ✨ Step 4: Share & Shine
 Share your professional portfolio with clients, employers, or friends!
