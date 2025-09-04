@@ -149,7 +149,7 @@ def google_auth(request):
 
     except Exception as e:
         return Response(
-            {'error': f'An error occurred during Google authentication: {str(e)}'}, 
+            {'error': f'An error occurred during Google authentication'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 

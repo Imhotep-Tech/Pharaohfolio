@@ -153,7 +153,7 @@ def password_reset_request(request):
         
     except Exception as e:
         return Response(
-            {'error': f'An error occurred during password reset request: {str(e)}'}, 
+            {'error': f'An error occurred during password reset request'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -218,7 +218,7 @@ def password_reset_confirm(request):
         
     except Exception as e:
         return Response(
-            {'error': f'An error occurred during password reset: {str(e)}'}, 
+            {'error': f'An error occurred during password reset'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -262,7 +262,7 @@ def password_reset_validate(request):
             
     except Exception as e:
         return Response(
-            {'valid': False, 'error': f'An error occurred during validation: {str(e)}'}, 
+            {'valid': False, 'error': f'An error occurred during validation'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 

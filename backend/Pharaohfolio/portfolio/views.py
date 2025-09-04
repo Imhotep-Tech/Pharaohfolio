@@ -113,7 +113,7 @@ def code_operation(request):
                 portfolio.save()
             except Exception as e:
                 return Response(
-                    {'error': f'Failed to save user code: {str(e)}'}, 
+                    {'error': f'Failed to save user code'}, 
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
 
@@ -160,7 +160,7 @@ def code_operation(request):
 
     except Exception as e:
         return Response(
-            {'error': f'An error occurred during saving user code: {str(e)}'}, 
+            {'error': f'An error occurred during saving user code'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -182,7 +182,7 @@ def get_code(request):
         })
     except Exception as e:
         return Response(
-            {'error': f'An error occurred during getting user code: {str(e)}'}, 
+            {'error': f'An error occurred during getting user code'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -212,4 +212,4 @@ def public_portfolio(request, username):
             return Response({'error': 'Portfolio not found'}, status=404)
         return Response({'user_code': portfolio.user_code})
     except Exception as e:
-        return Response({'error': f'An error occurred: {str(e)}'}, status=500)
+        return Response({'error': f'An error occurred'}, status=500)

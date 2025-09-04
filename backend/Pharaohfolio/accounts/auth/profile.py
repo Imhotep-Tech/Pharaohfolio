@@ -137,7 +137,7 @@ def update_profile(request):
 
     except Exception as e:
         return Response(
-            {'error': f'An error occurred during profile update: {str(e)}'}, 
+            {'error': f'An error occurred during profile update'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -191,7 +191,7 @@ def change_password(request):
 
     except Exception as e:
         return Response(
-            {'error': f'An error occurred during password change: {str(e)}'}, 
+            {'error': f'An error occurred during password change'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -247,6 +247,6 @@ def verify_email_change(request):
             
     except Exception as e:
         return Response(
-            {'error': f'An error occurred during email verification: {str(e)}'}, 
+            {'error': f'An error occurred during email verification'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
