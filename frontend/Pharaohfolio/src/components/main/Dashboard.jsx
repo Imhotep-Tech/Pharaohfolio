@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [sanitizationLog, setSanitizationLog] = useState([]);
 
   // Fetch portfolio code once on mount
   useEffect(() => {
@@ -21,12 +22,15 @@ const Dashboard = () => {
       .then(res => {
         if (res.data?.user_code_status) {
           setPortfolioCode(res.data.user_code || '');
+          setSanitizationLog(res.data.sanitization_log || []);
         } else {
           setPortfolioCode('');
+          setSanitizationLog([]);
         }
       })
       .catch(() => {
         setPortfolioCode('');
+        setSanitizationLog([]);
       });
   }, []);
 
@@ -41,12 +45,15 @@ const Dashboard = () => {
         .then(res => {
           if (res.data?.user_code_status) {
             setPortfolioCode(res.data.user_code || '');
+            setSanitizationLog(res.data.sanitization_log || []);
           } else {
             setPortfolioCode('');
+            setSanitizationLog([]);
           }
         })
         .catch(() => {
           setPortfolioCode('');
+          setSanitizationLog([]);
         })
         .finally(() => setLoading(false));
     }
@@ -62,13 +69,27 @@ const Dashboard = () => {
       return;
     }
     try {
-      await axios.post('/api/portfolio/save/', { user_code: portfolioCode });
-      setSuccess('Portfolio saved successfully!');
+      const response = await axios.post('/api/portfolio/save/', { user_code: portfolioCode });
+      setSuccess(response.data.message);
+      
+      // Show sanitization details if changes were made
+      if (response.data.changes_made) {
+        const details = response.data.sanitization_details || [];
+        if (details.length > 0) {
+          const warningMessage = `⚠️ Security modifications made:\n${response.data.sanitization_summary}`;
+          setError(warningMessage);
+        }
+      }
     } catch (err) {
-      setError('Failed to save portfolio.');
+      if (err.response?.data?.error) {
+        setError(err.response.data.error);
+      } else {
+        setError('Failed to save portfolio. Please try again.');
+      }
     }
     setSaving(false);
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-indigo-100 to-blue-100 bg-chef-pattern">
@@ -167,35 +188,63 @@ const Dashboard = () => {
               <h3 className="text-2xl font-bold font-chef text-gray-800 mb-4">
                 Get Started in 3 Steps
               </h3>
-              <ol className="text-left text-gray-700 space-y-2 mb-4">
-                <li><b>1.</b> Ask any AI assistant: <span className="italic">"Create me a portfolio website for a web developer with HTML, CSS, and JavaScript on one file. <b>Do not use images or external links except for images from https://i.imgur.com/ or https://live.staticflickr.com/. Do not use navigation bars or navigation links.</b>"</span></li>
-                <li><b>2.</b> Paste the generated code into the editor.</li>
-                <li><b>3.</b> Click <b>Save & Deploy</b> to publish your portfolio instantly!</li>
+              <ol className="text-left text-gray-700 space-y-3 mb-6">
+                <li className="flex items-start gap-3">
+                  <span className="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">1</span>
+                  <div>
+                    <strong>Generate your code with AI:</strong>
+                    <div className="mt-1 p-2 bg-gray-50 rounded text-sm font-mono text-left">
+                      "Create a complete portfolio website in a single HTML file with embedded CSS and JavaScript. Include sections for: hero, about, projects, skills, and contact. Use modern styling with gradients, animations, and responsive design. For images, ONLY use URLs from: https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do NOT include navigation menus, external links, or any elements that could be security risks."
+                    </div>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">2</span>
+                  <div>
+                    <strong>Copy and paste the complete code</strong> (including &lt;!DOCTYPE html&gt;, &lt;head&gt;, and &lt;body&gt; tags) into the editor below.
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="bg-purple-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">3</span>
+                  <div>
+                    <strong>Click "Save & Deploy"</strong> to publish your portfolio instantly!
+                  </div>
+                </li>
               </ol>
               <p className="text-gray-500 text-sm">
                 Your portfolio will be live at <b>pharaohfolio.com/u/yourusername</b>
               </p>
             </div>
             {/* Security Notice */}
-            <div className="mt-4 mb-2 p-3 bg-yellow-50 border border-yellow-200 rounded text-yellow-800 text-xs text-left">
-              <b>Security Notice:</b> For your safety, <b>only &lt;img&gt; tags with src from <span className="underline">https://i.imgur.com/</span> or <span className="underline">https://live.staticflickr.com/</span> are allowed</b>. 
-              All other images and all navigation bars/links will be removed. You may use <b>&lt;a&gt;</b> tags for external links. 
-              To add images, upload them to <a href="https://imgur.com/upload" target="_blank" rel="noopener noreferrer" className="underline text-blue-700">imgur.com</a> or <a href="https://www.flickr.com/" target="_blank" rel="noopener noreferrer" className="underline text-blue-700">flickr.com</a> and use the direct image link (starts with <span className="underline">https://i.imgur.com/</span> or <span className="underline">https://live.staticflickr.com/</span>).
-              <br />
-              <b>Navigation bars and navigation links are not allowed and will be removed for security.</b>
+            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800 text-sm">
+              <div className="flex items-start gap-2 mb-2">
+                <svg className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+                <div>
+                  <strong className="text-blue-900">Security & Content Guidelines:</strong>
+                </div>
+              </div>
+              <ul className="space-y-1 text-xs">
+                <li>• <strong>Allowed image sources:</strong> imgur.com, flickr.com, unsplash.com, picsum.photos</li>
+                <li>• <strong>Navigation menus are automatically removed</strong> for security</li>
+                <li>• <strong>External links (&lt;a&gt; tags) are allowed</strong> but will be sanitized</li>
+                <li>• <strong>Any security modifications will be clearly shown</strong> after saving</li>
+                <li>• <strong>Only sanitized code is saved</strong> for maximum security</li>
+              </ul>
             </div>
             {/* Prompt Examples */}
             <div className="mt-8">
               <h4 className="text-lg font-semibold text-gray-800 mb-2">Prompt Examples for AI</h4>
               <ul className="space-y-2 text-left text-gray-700 text-sm">
-                <PromptExample text={`Create a personal portfolio website for a frontend developer named Sarah, with a modern design, a hero section, about, projects, and contact form. Use HTML, CSS, and JavaScript in one file. For images, use only links from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
-                <PromptExample text={`Generate a single-file HTML/CSS/JS portfolio for a graphic designer named Alex, with a gallery section (use imgur or flickr images), animated transitions, and a dark theme. Only use images from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
-                <PromptExample text={`Build a responsive portfolio page for a data scientist named Priya, including sections for bio, skills, projects (with charts using only CSS/HTML), and contact info. Use only HTML, CSS, and JavaScript. Images must be from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
-                <PromptExample text={`Create a one-page resume website for a backend engineer named Ahmed, with a timeline of experience, skills, and a downloadable CV button. Use HTML, CSS, and JavaScript in one file. Images only from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
-                <PromptExample text={`Make a creative portfolio for a photographer named Emily, with a fullscreen color slider, about section, and contact form. Use imgur or flickr images only (https://i.imgur.com/ or https://live.staticflickr.com/). Do not include navigation bars or navigation links.`} />
-                <PromptExample text={`Design a portfolio for a UI/UX designer named Lucas, with a case studies section, testimonials, and a minimal, clean layout. Use HTML, CSS, and JavaScript in one file. Images only from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
-                <PromptExample text={`Create a personal landing page for a student named Maria, with sections for education, projects, and social links (as text or <a> tags). Use only HTML, CSS, and JavaScript. Images only from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
-                <PromptExample text={`Build a portfolio for a mobile app developer named John, featuring app screenshots as imgur images, skills, and a contact form. All code in one HTML file. Images only from https://i.imgur.com/ or https://live.staticflickr.com/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Create a personal portfolio website for a frontend developer named Sarah, with a modern design, a hero section, about, projects, and contact form. Use HTML, CSS, and JavaScript in one file. For images, use only links from https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Generate a single-file HTML/CSS/JS portfolio for a graphic designer named Alex, with a gallery section, animated transitions, and a dark theme. Only use images from https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Build a responsive portfolio page for a data scientist named Priya, including sections for bio, skills, projects (with charts using only CSS/HTML), and contact info. Use only HTML, CSS, and JavaScript. Images must be from https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Create a one-page resume website for a backend engineer named Ahmed, with a timeline of experience, skills, and a downloadable CV button. Use HTML, CSS, and JavaScript in one file. Images only from https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Make a creative portfolio for a photographer named Emily, with a fullscreen color slider, about section, and contact form. Use images only from https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Design a portfolio for a UI/UX designer named Lucas, with a case studies section, testimonials, and a minimal, clean layout. Use HTML, CSS, and JavaScript in one file. Images only from https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Create a personal landing page for a student named Maria, with sections for education, projects, and social links (as text or <a> tags). Use only HTML, CSS, and JavaScript. Images only from https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do not include navigation bars or navigation links.`} />
+                <PromptExample text={`Build a portfolio for a mobile app developer named John, featuring app screenshots, skills, and a contact form. All code in one HTML file. Images only from https://i.imgur.com/, https://live.staticflickr.com/, https://images.unsplash.com/, or https://picsum.photos/. Do not include navigation bars or navigation links.`} />
               </ul>
               <div className="text-xs text-gray-400 mt-2">
                 Click the copy icon to use a prompt with your favorite AI!
@@ -222,6 +271,27 @@ const Dashboard = () => {
             <p className="text-gray-600 mb-4 text-sm">
               Paste your HTML, CSS, and JavaScript code below. This will be your live portfolio.
             </p>
+            
+            {/* Sanitization info */}
+            {sanitizationLog.length > 0 && (
+              <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800 text-sm">
+                <div className="flex items-start gap-2">
+                  <svg className="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <div>
+                    <strong>Previous modifications made:</strong>
+                    <ul className="mt-1 space-y-1">
+                      {sanitizationLog.map((log, index) => (
+                        <li key={index} className="text-xs">
+                          • {log.action.replace(/_/g, ' ')}: {log.count} items
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
             {loading ? (
               <div className="text-center py-12">Loading...</div>
             ) : (
