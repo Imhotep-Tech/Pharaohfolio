@@ -47,45 +47,138 @@ DANGEROUS_ATTRIBUTES = [
     'onabort', 'onunload', 'onresize', 'onscroll', 'ondblclick'
 ]
 
-def sanitize_portfolio_code(code):
-    """Enhanced sanitization for XSS prevention with CSP compliance and imgur/flickr-only images"""
-    # Remove dangerous event handlers
+def sanitize_portfolio_code(code, portfolio_instance=None):
+    """
+    Enhanced sanitization for XSS prevention with detailed logging and code preservation.
+    Returns tuple: (sanitized_code, sanitization_log)
+    """
+    sanitization_log = []
+    original_code = code
+    
+    # Step 1: Remove dangerous event handlers (but log what we remove)
+    removed_attributes = []
     for attr in DANGEROUS_ATTRIBUTES:
         pattern = re.compile(rf'{attr}\s*=\s*["\'][^"\']*["\']', re.IGNORECASE)
-        code = pattern.sub('', code)
+        matches = pattern.findall(code)
+        if matches:
+            removed_attributes.extend(matches)
+            code = pattern.sub('', code)
+    
+    if removed_attributes:
+        sanitization_log.append({
+            'action': 'removed_dangerous_attributes',
+            'details': removed_attributes,
+            'count': len(removed_attributes)
+        })
 
-    # Remove javascript: protocols
-    js_protocol_pattern = re.compile(r'javascript\s*:', re.IGNORECASE)
-    code = js_protocol_pattern.sub('', code)
+    # Step 2: Remove javascript: protocols
+    js_protocol_matches = re.findall(r'javascript\s*:[^"\'>\s]+', code, re.IGNORECASE)
+    if js_protocol_matches:
+        sanitization_log.append({
+            'action': 'removed_javascript_protocols',
+            'details': js_protocol_matches,
+            'count': len(js_protocol_matches)
+        })
+        js_protocol_pattern = re.compile(r'javascript\s*:', re.IGNORECASE)
+        code = js_protocol_pattern.sub('', code)
 
-    # Remove data: URLs for scripts (but allow for images)
-    data_script_pattern = re.compile(r'src\s*=\s*["\']data:[^"\']*script[^"\']*["\']', re.IGNORECASE)
-    code = data_script_pattern.sub('', code)
+    # Step 3: Remove data: URLs for scripts (but allow for images)
+    data_script_matches = re.findall(r'src\s*=\s*["\']data:[^"\']*script[^"\']*["\']', code, re.IGNORECASE)
+    if data_script_matches:
+        sanitization_log.append({
+            'action': 'removed_data_scripts',
+            'details': data_script_matches,
+            'count': len(data_script_matches)
+        })
+        data_script_pattern = re.compile(r'src\s*=\s*["\']data:[^"\']*script[^"\']*["\']', re.IGNORECASE)
+        code = data_script_pattern.sub('', code)
 
-    # Bleach sanitization (allow <img> with src, but filter src below)
+    # Step 4: Enhanced Bleach sanitization with more permissive settings
+    # Allow more CSS properties and attributes for better styling preservation
+    enhanced_allowed_attributes = ALLOWED_ATTRIBUTES.copy()
+    enhanced_allowed_attributes['*'].extend([
+        'data-*', 'aria-*', 'role', 'tabindex', 'contenteditable',
+        'draggable', 'spellcheck', 'translate', 'dir', 'lang'
+    ])
+    
+    # Enhanced Bleach sanitization with more permissive settings
+    # Remove style attributes to avoid CSS sanitizer warning
+    enhanced_allowed_attributes_no_style = {}
+    for tag, attrs in enhanced_allowed_attributes.items():
+        enhanced_allowed_attributes_no_style[tag] = [attr for attr in attrs if attr != 'style']
+    
     sanitized = bleach.clean(
         code,
-        tags=ALLOWED_TAGS + ['script'],
-        attributes=ALLOWED_ATTRIBUTES,
-        protocols=['http', 'https', 'mailto', 'tel'],
+        tags=ALLOWED_TAGS + ['script', 'iframe', 'embed', 'object', 'param'],
+        attributes=enhanced_allowed_attributes_no_style,
+        protocols=['http', 'https', 'mailto', 'tel', 'data'],
         strip=True,
         strip_comments=False
     )
 
-    # Allow only <img> tags with src from imgur or flickr direct CDN
+    # Step 5: Handle images more intelligently
+    # Find all img tags and check their sources
+    img_pattern = re.compile(r'<img\b([^>]*?)src=["\']([^"\']*)["\']([^>]*?)>', re.IGNORECASE)
+    img_matches = img_pattern.findall(sanitized)
+    removed_images = []
+    
     def is_allowed_img_src(src):
-        return (
-            src.startswith('https://i.imgur.com/')
-            or src.startswith('https://live.staticflickr.com/')
-        )
+        allowed_domains = [
+            'https://i.imgur.com/',
+            'https://live.staticflickr.com/',
+            'https://images.unsplash.com/',  # Add Unsplash as allowed
+            'https://picsum.photos/',        # Add Lorem Picsum as allowed
+        ]
+        return any(src.startswith(domain) for domain in allowed_domains)
+    
+    def replace_img_tag(match):
+        full_match = match.group(0)
+        before_src = match.group(1)
+        src = match.group(2)
+        after_src = match.group(3)
+        if not is_allowed_img_src(src):
+            removed_images.append(src)
+            # Replace with a placeholder div instead of removing completely
+            return f'<div class="removed-image-placeholder" style="background: #f0f0f0; border: 2px dashed #ccc; padding: 20px; text-align: center; color: #666;">Image removed for security<br><small>Use images from imgur.com, flickr.com, unsplash.com, or picsum.photos</small></div>'
+        return full_match
+    
+    sanitized = img_pattern.sub(replace_img_tag, sanitized)
+    
+    if removed_images:
+        sanitization_log.append({
+            'action': 'removed_images',
+            'details': removed_images,
+            'count': len(removed_images)
+        })
 
-    # Remove all <img> tags not from allowed sources
-    sanitized = re.sub(
-        r'<img\b([^>]*?)src=["\'](?!https://i\.imgur\.com/|https://live\.staticflickr\.com/)[^"\']*["\']([^>]*?)>',
-        '', sanitized, flags=re.IGNORECASE
-    )
+    # Step 6: Remove navigation elements (nav, ul with nav classes, etc.)
+    nav_elements_removed = []
+    
+    # Remove nav tags
+    nav_matches = re.findall(r'<nav\b[^>]*>.*?</nav>', sanitized, re.IGNORECASE | re.DOTALL)
+    if nav_matches:
+        nav_elements_removed.extend(nav_matches)
+        sanitized = re.sub(r'<nav\b[^>]*>.*?</nav>', '', sanitized, flags=re.IGNORECASE | re.DOTALL)
+    
+    # Remove ul/ol with navigation classes
+    nav_list_matches = re.findall(r'<(ul|ol)\b[^>]*class=["\'][^"\']*nav[^"\']*["\'][^>]*>.*?</\1>', sanitized, re.IGNORECASE | re.DOTALL)
+    if nav_list_matches:
+        nav_elements_removed.extend(nav_list_matches)
+        sanitized = re.sub(r'<(ul|ol)\b[^>]*class=["\'][^"\']*nav[^"\']*["\'][^>]*>.*?</\1>', '', sanitized, flags=re.IGNORECASE | re.DOTALL)
+    
+    if nav_elements_removed:
+        sanitization_log.append({
+            'action': 'removed_navigation',
+            'details': nav_elements_removed,
+            'count': len(nav_elements_removed)
+        })
 
-    return sanitized
+    # Step 7: Log to portfolio instance if provided
+    if portfolio_instance and sanitization_log:
+        for log_entry in sanitization_log:
+            portfolio_instance.add_sanitization_log(log_entry['action'], log_entry['details'])
+
+    return sanitized, sanitization_log
 
 # Create your views here.
 @api_view(['POST'])
@@ -94,30 +187,39 @@ def code_operation(request):
     try:
         user_code = request.data.get('user_code')
         user = request.user
+        
         if not user_code:
             return Response(
                 {'error': 'User code is required'}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Sanitize the user code before saving
-        sanitized_code = sanitize_portfolio_code(user_code)
+        # Basic validation
+        if len(user_code.strip()) < 10:
+            return Response(
+                {'error': 'Code is too short. Please provide a complete HTML document.'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        # Check if portfolio already exists for this user then create it
-        if not Portfolio.objects.filter(user=user).exists():
-            try:
-                portfolio = Portfolio.objects.create(
-                    user=user,
-                    user_code=sanitized_code,
-                )
-                portfolio.save()
-            except Exception as e:
-                return Response(
-                    {'error': f'Failed to save user code'}, 
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
+        # Check if portfolio already exists for this user
+        portfolio, created = Portfolio.objects.get_or_create(user=user)
+        
+        # Sanitize the user code with detailed logging
+        sanitized_code, sanitization_log = sanitize_portfolio_code(user_code, portfolio)
+        
+        # Update portfolio with sanitized code
+        try:
+            portfolio.user_code = sanitized_code
+            portfolio.save()
+        except Exception as e:
+            logger.error(f"Failed to save portfolio for user {user.username}: {str(e)}")
+            return Response(
+                {'error': 'Failed to save user code. Please try again.'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
-            # Send email: Portfolio Published
+        # Send email notification only for new portfolios
+        if created:
             try:
                 mail_subject = 'Your Pharaohfolio Portfolio is Published!'
                 message = render_to_string('portfolio_published_email.html', {
@@ -127,40 +229,28 @@ def code_operation(request):
                 })
                 send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
             except Exception as email_error:
-                print(f"Failed to send portfolio published email: {str(email_error)}")
-        else:
-            existing_portfolio = Portfolio.objects.get(user=user)
-            # Update the user code
-            try:
-                existing_portfolio.user_code = sanitized_code
-                existing_portfolio.save()
-            except Exception:   
-                return Response(
-                    {'error': f'Failed to save user code'}, 
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                )
+                logger.warning(f"Failed to send portfolio published email: {str(email_error)}")
 
-            # Send email: Portfolio Updated
-            #! Removed for now because it's sending a lot of emails if a user updates it multiple times in row and it slows down
-            # try:
-            #     mail_subject = 'Your Pharaohfolio Portfolio Has Been Updated'
-            #     message = render_to_string('portfolio_updated_email.html', {
-            #         'user': user,
-            #         'frontend_url': frontend_url,
-            #         'portfolio_url': f"{frontend_url}/u/{user.username}",
-            #     })
-            #     send_mail(mail_subject, '', 'imhoteptech1@gmail.com', [user.email], html_message=message)
-            # except Exception as email_error:
-            #     print(f"Failed to send portfolio updated email: {str(email_error)}")
+        # Prepare response with sanitization details
+        response_data = {
+            'message': f'Portfolio saved successfully! You can access it at {frontend_url}/u/{user.username}',
+            'portfolio_url': f"{frontend_url}/u/{user.username}",
+            'created': created,
+            'sanitization_summary': portfolio.get_sanitization_summary(),
+            'changes_made': len(sanitization_log) > 0
+        }
+        
+        # Include detailed sanitization info if changes were made
+        if sanitization_log:
+            response_data['sanitization_details'] = sanitization_log
+            response_data['warning'] = 'Some elements were modified for security. Check the details below.'
 
-        return Response(
-            {'message': f'User Portfolio Saved Successfully you can access it at {frontend_url}/{user.username}'}, 
-            status=status.HTTP_201_CREATED
-        )
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
     except Exception as e:
+        logger.error(f"Error in code_operation for user {request.user.username if request.user.is_authenticated else 'anonymous'}: {str(e)}")
         return Response(
-            {'error': f'An error occurred during saving user code'}, 
+            {'error': 'An unexpected error occurred. Please try again.'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
@@ -169,22 +259,33 @@ def code_operation(request):
 def get_code(request):
     try:
         user = request.user
-        user_code_status = Portfolio.objects.filter(user=user).exists()
+        portfolio = Portfolio.objects.filter(user=user).first()
 
-        if user_code_status:
-            portfolio_user_code = Portfolio.objects.get(user=user).user_code
+        if portfolio:
+            return Response({
+                'user_code': portfolio.user_code,
+                'user_code_status': True,
+                'sanitization_log': portfolio.sanitization_log,
+                'sanitization_summary': portfolio.get_sanitization_summary(),
+                'created_at': portfolio.created_at,
+                'updated_at': portfolio.updated_at
+            })
         else:
-            portfolio_user_code = ''
-
-        return Response({
-            'user_code': portfolio_user_code,
-            'user_code_status': user_code_status
-        })
+            return Response({
+                'user_code': '',
+                'user_code_status': False,
+                'sanitization_log': [],
+                'sanitization_summary': 'No portfolio found',
+                'created_at': None,
+                'updated_at': None
+            })
     except Exception as e:
+        logger.error(f"Error getting code for user {user.username}: {str(e)}")
         return Response(
-            {'error': f'An error occurred during getting user code'}, 
+            {'error': 'An error occurred while retrieving your code'}, 
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
