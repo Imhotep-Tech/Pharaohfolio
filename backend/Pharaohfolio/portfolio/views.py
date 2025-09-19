@@ -47,6 +47,51 @@ DANGEROUS_ATTRIBUTES = [
     'onabort', 'onunload', 'onresize', 'onscroll', 'ondblclick'
 ]
 
+def sanitize_script_content(script_content):
+    """Sanitize JavaScript content to remove dangerous patterns while preserving functionality"""
+    if not script_content:
+        return script_content
+    
+    # Dangerous JavaScript patterns to remove/neutralize
+    dangerous_patterns = [
+        # Direct alert/confirm/prompt calls
+        (r'\balert\s*\(', 'console.log('),
+        (r'\bconfirm\s*\(', 'console.log('),
+        (r'\bprompt\s*\(', 'console.log('),
+        
+        # eval and similar dangerous functions
+        (r'\beval\s*\(', '// blocked eval('),
+        (r'\bFunction\s*\(', '// blocked Function('),
+        (r'\bsetTimeout\s*\(\s*["\'][^"\']*["\']', '// blocked setTimeout with string'),
+        (r'\bsetInterval\s*\(\s*["\'][^"\']*["\']', '// blocked setInterval with string'),
+        
+        # Document methods that can be dangerous
+        (r'\bdocument\.write\s*\(', 'console.log('),
+        (r'\bdocument\.writeln\s*\(', 'console.log('),
+        
+        # Location/navigation changes
+        (r'\bwindow\.location\s*=', '// blocked window.location ='),
+        (r'\blocation\.href\s*=', '// blocked location.href ='),
+        (r'\blocation\.replace\s*\(', '// blocked location.replace('),
+        (r'\blocation\.assign\s*\(', '// blocked location.assign('),
+        
+        # Cookie access
+        (r'\bdocument\.cookie\s*=', '// blocked document.cookie ='),
+        (r'\bdocument\.cookie', 'null /* blocked document.cookie */'),
+        
+        # External script injection
+        (r'document\.createElement\s*\(\s*["\']script["\']', 'null /* blocked script creation */'),
+        
+        # innerHTML with script content (basic detection)
+        (r'\.innerHTML\s*=\s*["\'][^"\']*<script[^"\']*["\']', '// blocked innerHTML with script'),
+    ]
+    
+    sanitized = script_content
+    for pattern, replacement in dangerous_patterns:
+        sanitized = re.sub(pattern, replacement, sanitized, flags=re.IGNORECASE | re.MULTILINE)
+    
+    return sanitized
+
 def sanitize_portfolio_code(code):
     """Enhanced sanitization for XSS prevention with CSP compliance and imgur/flickr-only images"""
     # Remove dangerous event handlers
@@ -62,7 +107,23 @@ def sanitize_portfolio_code(code):
     data_script_pattern = re.compile(r'src\s*=\s*["\']data:[^"\']*script[^"\']*["\']', re.IGNORECASE)
     code = data_script_pattern.sub('', code)
 
-    # Bleach sanitization (allow <img> with src, but filter src below)
+    # Extract and sanitize script contents before bleach processing
+    script_pattern = re.compile(r'(<script[^>]*>)(.*?)(</script>)', re.IGNORECASE | re.DOTALL)
+    
+    def sanitize_script_match(match):
+        opening_tag = match.group(1)
+        script_content = match.group(2)
+        closing_tag = match.group(3)
+        
+        # Sanitize the script content
+        safe_content = sanitize_script_content(script_content)
+        
+        return opening_tag + safe_content + closing_tag
+    
+    # Apply script content sanitization
+    code = script_pattern.sub(sanitize_script_match, code)
+
+    # Bleach sanitization (allow script tags)
     sanitized = bleach.clean(
         code,
         tags=ALLOWED_TAGS + ['script'],
