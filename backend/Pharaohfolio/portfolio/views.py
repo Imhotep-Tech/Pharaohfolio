@@ -69,21 +69,29 @@ def sanitize_script_content(script_content):
         (r'\bdocument\.write\s*\(', 'console.log('),
         (r'\bdocument\.writeln\s*\(', 'console.log('),
         
-        # Location/navigation changes
+        # Location/navigation changes (more comprehensive)
+        (r'\bwindow\.parent\.location\s*=', '// blocked window.parent.location ='),
         (r'\bwindow\.location\s*=', '// blocked window.location ='),
         (r'\blocation\.href\s*=', '// blocked location.href ='),
         (r'\blocation\.replace\s*\(', '// blocked location.replace('),
         (r'\blocation\.assign\s*\(', '// blocked location.assign('),
+        (r'\btop\.location\s*=', '// blocked top.location ='),
+        (r'\bparent\.location\s*=', '// blocked parent.location ='),
         
-        # Cookie access
+        # Cookie access (order matters - more specific first)
         (r'\bdocument\.cookie\s*=', '// blocked document.cookie ='),
-        (r'\bdocument\.cookie', 'null /* blocked document.cookie */'),
+        (r'\bdocument\.cookie\b(?!\s*=)', 'null /* blocked document.cookie */'),
         
         # External script injection
         (r'document\.createElement\s*\(\s*["\']script["\']', 'null /* blocked script creation */'),
         
         # innerHTML with script content (basic detection)
         (r'\.innerHTML\s*=\s*["\'][^"\']*<script[^"\']*["\']', '// blocked innerHTML with script'),
+        
+        # Frame busting and sandboxing escape attempts
+        (r'\btop\s*!=\s*self', '// blocked frame busting'),
+        (r'\bself\s*!=\s*top', '// blocked frame busting'),
+        (r'\bwindow\.top\s*!=\s*window', '// blocked frame busting'),
     ]
     
     sanitized = script_content
@@ -108,20 +116,69 @@ def sanitize_portfolio_code(code):
     code = data_script_pattern.sub('', code)
 
     # Extract and sanitize script contents before bleach processing
-    script_pattern = re.compile(r'(<script[^>]*>)(.*?)(</script>)', re.IGNORECASE | re.DOTALL)
+    # Use a more careful approach to handle script tags in strings
+    script_parts = []
+    current_pos = 0
     
-    def sanitize_script_match(match):
-        opening_tag = match.group(1)
-        script_content = match.group(2)
-        closing_tag = match.group(3)
+    while True:
+        # Find next script opening tag
+        script_start = code.find('<script', current_pos)
+        if script_start == -1:
+            # Add remaining content
+            script_parts.append(code[current_pos:])
+            break
+        
+        # Add content before script tag
+        script_parts.append(code[current_pos:script_start])
+        
+        # Find end of opening tag
+        tag_end = code.find('>', script_start)
+        if tag_end == -1:
+            # Malformed tag, add as-is and continue
+            script_parts.append(code[script_start:])
+            break
+        
+        opening_tag = code[script_start:tag_end + 1]
+        
+        # Find matching closing tag, being careful about quoted strings
+        content_start = tag_end + 1
+        pos = content_start
+        while pos < len(code):
+            # Look for </script> not in quotes
+            close_pos = code.find('</script>', pos)
+            if close_pos == -1:
+                # No closing tag found, treat rest as content
+                script_content = code[content_start:]
+                closing_tag = ''
+                current_pos = len(code)
+                break
+            
+            # Check if this </script> is in quotes by counting quotes before it
+            text_before = code[content_start:close_pos]
+            # Simple heuristic: if we have an even number of unescaped quotes before this point,
+            # it's probably not in a string
+            quote_count = text_before.count('"') - text_before.count('\\"')
+            quote_count += text_before.count("'") - text_before.count("\\'")
+            
+            if quote_count % 2 == 0:
+                # Likely not in quotes, this is our closing tag
+                script_content = code[content_start:close_pos]
+                closing_tag = '</script>'
+                current_pos = close_pos + 9
+                break
+            else:
+                # Likely in quotes, keep looking
+                pos = close_pos + 9
+                continue
         
         # Sanitize the script content
         safe_content = sanitize_script_content(script_content)
         
-        return opening_tag + safe_content + closing_tag
+        # Add the sanitized script
+        script_parts.append(opening_tag + safe_content + closing_tag)
     
-    # Apply script content sanitization
-    code = script_pattern.sub(sanitize_script_match, code)
+    # Reconstruct the code
+    code = ''.join(script_parts)
 
     # Bleach sanitization (allow script tags)
     sanitized = bleach.clean(
