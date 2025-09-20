@@ -83,14 +83,15 @@ def sanitize_portfolio_code(code, portfolio_instance=None):
         code = js_protocol_pattern.sub('', code)
 
     # Step 3: Remove data: URLs for scripts (but allow for images)
-    data_script_matches = re.findall(r'src\s*=\s*["\']data:[^"\']*script[^"\']*["\']', code, re.IGNORECASE)
+    data_script_matches = re.findall(r'src\s*=\s*["\']data:[^"\']*?script[^"\']*?["\']', code, re.IGNORECASE)
     if data_script_matches:
         sanitization_log.append({
             'action': 'removed_data_scripts',
             'details': data_script_matches,
             'count': len(data_script_matches)
         })
-        data_script_pattern = re.compile(r'src\s*=\s*["\']data:[^"\']*script[^"\']*["\']', re.IGNORECASE)
+        # Optimize the regex to avoid inefficiency
+        data_script_pattern = re.compile(r'src\s*=\s*["\']data:[^"\']*?script[^"\']*?["\']', re.IGNORECASE)
         code = data_script_pattern.sub('', code)
 
     # Step 4: Enhanced Bleach sanitization with more permissive settings
