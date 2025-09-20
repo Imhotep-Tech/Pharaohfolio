@@ -369,8 +369,9 @@ We'd love to hear it! Open an issue with the `enhancement` label.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under a **Custom License**. Commercial use of this software is prohibited without prior written permission from Imhotep Tech. For more details, see the [LICENSE](LICENSE) file.
 
+To request permission for commercial use, contact us at **imhoteptech@outlook.com**.
 ---
 
 ## 🌟 Show Your Support
