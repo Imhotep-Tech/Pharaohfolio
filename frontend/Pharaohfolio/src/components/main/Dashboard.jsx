@@ -4,6 +4,7 @@ import axios from 'axios';
 import Footer from '../common/Footer';
 import PharaohfolioLogo from '../../assets/PharaohfolioLogo.png';
 import CodeEditor from './components/CodeEditor';
+import { Link } from 'react-router-dom'; // added
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -129,6 +130,10 @@ const Dashboard = () => {
             <p className="text-lg sm:text-xl text-gray-600 font-medium leading-relaxed max-w-2xl">
               Paste your AI-generated HTML/CSS/JS code and deploy your portfolio instantly.
             </p>
+            {/* add paste-only clarification */}
+            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800 text-sm">
+              <strong>Heads up:</strong> Pharaohfolio does <u>not</u> generate websites. Use ChatGPT, Gemini, Claude, etc. to create your code, then paste it here to deploy.
+            </div>
           </div>
           
           {/* Quick Action Buttons */}
@@ -142,7 +147,16 @@ const Dashboard = () => {
               </svg>
               <span>{portfolioCode ? 'Edit Portfolio' : 'Create Portfolio'}</span>
             </button>
-            {/* ...other dashboard actions if needed... */}
+            {/* new: link to prompt examples */}
+            <Link
+              to="/prompts"
+              className="chef-button-secondary w-full sm:w-auto flex items-center justify-center space-x-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
+              </svg>
+              <span>Prompt Examples</span>
+            </Link>
           </div>
         </div>
 
@@ -271,6 +285,10 @@ const Dashboard = () => {
             <p className="text-gray-600 mb-4 text-sm">
               Paste your HTML, CSS, and JavaScript code below. This will be your live portfolio.
             </p>
+            {/* new: paste-only note inside editor modal */}
+            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-yellow-800 text-sm">
+              <strong>Paste-only:</strong> This editor does not generate code. Copy the complete single-file HTML from ChatGPT, Gemini, Claude, etc., then paste it here.
+            </div>
             
             {/* Sanitization info */}
             {sanitizationLog.length > 0 && (

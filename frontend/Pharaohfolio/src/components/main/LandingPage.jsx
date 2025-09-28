@@ -10,8 +10,8 @@ function LandingPage() {
   const features = [
     {
       icon: "🤖",
-      title: "AI-Generated Code Support",
-      description: "Works with any AI assistant (ChatGPT, Claude, Gemini, etc.)"
+      title: "Bring-Your-Own AI Code", // changed
+      description: "Generate with ChatGPT, Gemini, or Claude — Pharaohfolio does not generate code; it hosts it.", // changed
     },
     {
       icon: "📋",
@@ -98,7 +98,7 @@ function LandingPage() {
                 Simple Hosting for AI-Generated Single-Page Portfolios
               </h2>
               <p className="text-lg text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-                Instantly deploy your AI-generated HTML/CSS/JS portfolio. No technical skills required. Paste your code, get your live link, and share your work with the world!
+                Bring code you generated with your favorite AI and deploy it in seconds. Pharaohfolio itself does not generate code — it makes sharing it effortless.
               </p>
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
@@ -114,6 +114,12 @@ function LandingPage() {
                 >
                   🔓 Sign In
                 </Link>
+              </div>
+              {/* new: paste-only banner */}
+              <div className="mx-auto max-w-xl">
+                <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800 text-sm">
+                  <strong>Heads up:</strong> Pharaohfolio is paste-and-deploy. It doesn’t turn prompts into websites. Use ChatGPT, Gemini, or Claude to create your code, then paste it here to host.
+                </div>
               </div>
             </div>
           </div>
