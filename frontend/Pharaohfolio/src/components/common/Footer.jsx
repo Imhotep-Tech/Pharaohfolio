@@ -29,6 +29,15 @@ function Footer() {
           <div className="flex justify-center space-x-6 text-sm text-indigo-200">
             <a href="https://imhoteptech.vercel.app/" className="hover:text-purple-300 transition-colors" target="_blank" rel="noopener noreferrer">Imhotep Tech</a>
             <a href="https://github.com/Imhotep-Tech/Pharaohfolio" className="hover:text-purple-300 transition-colors" target="_blank" rel="noopener noreferrer">Source Code</a>
+            <a
+              href="https://tally.so/r/nPKe1P"
+              className="hover:text-purple-300 transition-colors"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Send feedback, request features, or report bugs on Tally"
+            >
+              Feedback & Bug Report
+            </a>
           </div>
           <div className="border-t border-indigo-800 mt-8 pt-8">
             <p className="text-indigo-400 text-xs">&copy; 2025 Pharaohfolio. All rights reserved.</p>
