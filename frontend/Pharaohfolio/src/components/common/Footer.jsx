@@ -40,7 +40,7 @@ function Footer() {
             </a>
           </div>
           <div className="border-t border-indigo-800 mt-8 pt-8">
-            <p className="text-indigo-400 text-xs">&copy; 2025 Pharaohfolio. All rights reserved.</p>
+            <p className="text-indigo-400 text-xs">&copy; 2026 Pharaohfolio. All rights reserved.</p>
           </div>
         </div>
       </div>
