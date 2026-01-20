@@ -13,7 +13,7 @@ import GoogleCallback from './components/auth/GoogleCallback'
 import Profile from './components/profile/Profile'
 import EmailChangeVerification from './components/profile/EmailChangeVerification'
 import PublicPortfolio from './components/main/PublicPortfolio'
-import PromptExamples from './components/main/PromptExamples'
+import PromptExamples from './components/prompts/PromptExamples'
 
 function App() {
   return (
