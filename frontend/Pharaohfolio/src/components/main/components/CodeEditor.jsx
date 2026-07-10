@@ -36,33 +36,33 @@ const CodeEditor = ({ value, onChange, language = "html" }) => {
         spellCheck={false}
         autoCorrect="off"
         autoCapitalize="off"
-        rows={18}
+        rows={22}
         style={{
           width: "100%",
-          minHeight: "300px",
-          background: "#18181b",
+          minHeight: "380px",
+          background: "#05070f",
           color: "#f3f4f6",
           fontFamily: "Fira Mono, Menlo, Monaco, 'Courier New', monospace",
-          fontSize: "15px",
-          borderRadius: "0.5rem",
-          border: "1px solid #d1d5db",
+          fontSize: "14px",
+          borderRadius: "0.75rem",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
           padding: "1rem",
           outline: "none",
           resize: "vertical",
-          lineHeight: "1.5",
+          lineHeight: "1.6",
           boxSizing: "border-box",
           tabSize: 2,
-          caretColor: "#f59e42",
-          transition: "border-color 0.2s",
+          caretColor: "#fbcd3d",
+          transition: "all 0.3s ease",
         }}
-        className="focus:ring-2 focus:ring-purple-400 focus:border-purple-400"
+        className="focus:ring-2 focus:ring-gold-500 focus:border-transparent"
         aria-label="Code editor"
         placeholder={`Paste your ${language.toUpperCase()} code here...`}
       />
       
       {/* Code stats */}
-      <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">
-        {value.length} characters, {lineNumbers.length} lines
+      <div className="absolute bottom-3 right-3 text-[10px] text-gray-500 bg-obsidian-900/80 px-2 py-1 rounded-md border border-white/5 font-mono">
+        {value.length} chars, {lineNumbers.length} lines
       </div>
     </div>
   );

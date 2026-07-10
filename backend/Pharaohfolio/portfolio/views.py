@@ -24,7 +24,11 @@ ALLOWED_TAGS = [
     'b', 'i', 'u', 'section', 'article', 'header', 'footer',
     'nav', 'main', 'aside', 'canvas', 'svg', 'table', 'tr', 'td', 'th',
     'thead', 'tbody', 'tfoot', 'form', 'input', 'button', 'textarea',
-    'select', 'option'
+    'select', 'option',
+    # SVG elements
+    'path', 'g', 'circle', 'rect', 'polygon', 'ellipse', 'line', 'polyline',
+    'text', 'defs', 'linearGradient', 'radialGradient', 'stop', 'use', 'mask',
+    'clipPath'
 ]
 
 ALLOWED_ATTRIBUTES = {
@@ -37,7 +41,21 @@ ALLOWED_ATTRIBUTES = {
     'button': ['type', 'onclick'],
     'form': ['action', 'method'],
     'canvas': ['width', 'height'],
-    'svg': ['width', 'height', 'viewBox', 'xmlns'],
+    'svg': ['width', 'height', 'viewBox', 'xmlns', 'fill', 'stroke', 'stroke-width'],
+    # SVG elements attributes
+    'path': ['d', 'fill', 'stroke', 'stroke-width', 'opacity', 'transform'],
+    'g': ['fill', 'stroke', 'stroke-width', 'opacity', 'transform'],
+    'circle': ['cx', 'cy', 'r', 'fill', 'stroke', 'stroke-width', 'opacity', 'transform'],
+    'rect': ['x', 'y', 'width', 'height', 'rx', 'ry', 'fill', 'stroke', 'stroke-width', 'opacity', 'transform'],
+    'polygon': ['points', 'fill', 'stroke', 'stroke-width', 'opacity', 'transform'],
+    'ellipse': ['cx', 'cy', 'rx', 'ry', 'fill', 'stroke', 'stroke-width', 'opacity', 'transform'],
+    'line': ['x1', 'y1', 'x2', 'y2', 'stroke', 'stroke-width', 'opacity', 'transform'],
+    'polyline': ['points', 'fill', 'stroke', 'stroke-width', 'opacity', 'transform'],
+    'text': ['x', 'y', 'dx', 'dy', 'text-anchor', 'fill', 'stroke', 'font-size', 'font-family', 'font-weight'],
+    'linearGradient': ['id', 'x1', 'y1', 'x2', 'y2', 'gradientUnits'],
+    'radialGradient': ['id', 'cx', 'cy', 'r', 'fx', 'fy', 'gradientUnits'],
+    'stop': ['offset', 'stop-color', 'stop-opacity'],
+    'use': ['href', 'xlink:href', 'x', 'y'],
 }
 
 # Enhanced sanitization for XSS prevention
@@ -94,28 +112,11 @@ def sanitize_portfolio_code(code, portfolio_instance=None):
         data_script_pattern = re.compile(r'src\s*=\s*["\']data:[^"\']*?script[^"\']*?["\']', re.IGNORECASE)
         code = data_script_pattern.sub('', code)
 
-    # Step 4: Enhanced Bleach sanitization with more permissive settings
-    # Allow more CSS properties and attributes for better styling preservation
-    enhanced_allowed_attributes = ALLOWED_ATTRIBUTES.copy()
-    enhanced_allowed_attributes['*'].extend([
-        'data-*', 'aria-*', 'role', 'tabindex', 'contenteditable',
-        'draggable', 'spellcheck', 'translate', 'dir', 'lang'
-    ])
-    
-    # Enhanced Bleach sanitization with more permissive settings
-    # Remove style attributes to avoid CSS sanitizer warning
-    enhanced_allowed_attributes_no_style = {}
-    for tag, attrs in enhanced_allowed_attributes.items():
-        enhanced_allowed_attributes_no_style[tag] = [attr for attr in attrs if attr != 'style']
-    
-    sanitized = bleach.clean(
-        code,
-        tags=ALLOWED_TAGS + ['script', 'iframe', 'embed', 'object', 'param'],
-        attributes=enhanced_allowed_attributes_no_style,
-        protocols=['http', 'https', 'mailto', 'tel', 'data'],
-        strip=True,
-        strip_comments=False
-    )
+    # Step 4: Bypass Bleach HTML parsing to preserve document structures (html, head, body tags)
+    # and prevent HTML-escaping inside script blocks (which corrupts javascript arrow functions and operators).
+    # The primary security boundary is the frontend iframe's sandbox="allow-scripts" attribute (with no allow-same-origin),
+    # which fully isolates the execution origin.
+    sanitized = code
 
     # Step 5: Handle images more intelligently
     # Find all img tags and check their sources

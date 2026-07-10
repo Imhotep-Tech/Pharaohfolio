@@ -99,44 +99,44 @@ const Register = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-100 via-indigo-100 to-blue-100 bg-chef-pattern">
+      <div className="min-h-screen bg-gradient-to-br from-obsidian-950 via-obsidian-900 to-indigo-950 bg-pharaoh-pattern text-white">
         {/* Floating decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-20 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
-          <div className="absolute top-40 right-20 w-24 h-24 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style={{animationDelay: '2s'}}></div>
-          <div className="absolute bottom-20 left-40 w-40 h-40 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style={{animationDelay: '4s'}}></div>
+          <div className="absolute top-20 left-20 w-32 h-32 bg-gold-600/5 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-float"></div>
+          <div className="absolute top-40 right-20 w-24 h-24 bg-yellow-500/5 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-float" style={{animationDelay: '2s'}}></div>
+          <div className="absolute bottom-20 left-40 w-40 h-40 bg-amber-600/5 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-float" style={{animationDelay: '4s'}}></div>
         </div>
         <div className="flex items-center justify-center min-h-screen p-4">
           <div className="relative w-full max-w-md">
-            <div className="chef-card rounded-3xl p-8 shadow-2xl border border-white/30 backdrop-blur-2xl bg-white/90 text-center">
+            <div className="pharaoh-card rounded-3xl p-8 shadow-2xl border border-white/10 backdrop-blur-2xl bg-obsidian-900/60 text-center">
               {/* Success Icon */}
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500 rounded-full mb-6 shadow-lg">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-500 rounded-full mb-6 shadow-lg">
                 <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
               <div
-                className="font-extrabold text-3xl sm:text-4xl mb-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 bg-clip-text text-transparent font-chef drop-shadow-lg tracking-wide"
+                className="font-extrabold text-3xl sm:text-4xl mb-2 bg-gradient-to-r from-gold-300 via-gold-500 to-gold-600 bg-clip-text text-transparent font-chef drop-shadow-lg tracking-wide"
                 style={{
                   letterSpacing: '0.04em',
                   lineHeight: '1.1',
-                  textShadow: '0 2px 8px rgba(124,58,237,0.12)'
+                  textShadow: '0 2px 8px rgba(212,175,55,0.2)'
                 }}
               >
                 Pharaohfolio
               </div>
-              <p className="text-gray-500 text-sm mb-2">Simple Hosting for Single-Page Portfolios</p>
-              <h2 className="text-3xl font-bold font-chef text-gray-800 mb-4">
-                Welcome to the Kitchen!
+              <p className="text-gray-400 text-xs mb-2">Simple Hosting for Single-Page Portfolios</p>
+              <h2 className="text-3xl font-bold font-chef text-white mb-4">
+                Welcome to Pharaohfolio!
               </h2>
-              <p className="text-gray-600 font-medium mb-8">
-                Your culinary journey begins now! Please check your email and click the verification link to activate your account before logging in.
+              <p className="text-gray-400 font-medium mb-8 text-sm">
+                Your portfolio hosting journey begins now! Please check your email and click the verification link to activate your account before logging in.
               </p>
               <Link 
                 to="/login" 
-                className="chef-button inline-block text-center no-underline"
+                className="pharaoh-button inline-block text-center no-underline"
               >
-                Start Cooking
+                Sign In
               </Link>
             </div>
             <div className="text-center mt-8">
@@ -152,20 +152,20 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-indigo-100 to-blue-100 bg-chef-pattern">
+    <div className="min-h-screen bg-gradient-to-br from-obsidian-950 via-obsidian-900 to-indigo-950 bg-pharaoh-pattern text-white">
       {/* Floating decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
-        <div className="absolute top-40 right-20 w-24 h-24 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-20 left-40 w-40 h-40 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style={{animationDelay: '4s'}}></div>
+        <div className="absolute top-20 left-20 w-32 h-32 bg-gold-600/5 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-float"></div>
+        <div className="absolute top-40 right-20 w-24 h-24 bg-yellow-500/5 rounded-full mix-blend-screen filter blur-3xl opacity-10 animate-float" style={{animationDelay: '2s'}}></div>
+        <div className="absolute bottom-20 left-40 w-40 h-40 bg-amber-600/5 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-float" style={{animationDelay: '4s'}}></div>
       </div>
       <div className="flex items-center justify-center min-h-screen p-4">
         <div className="relative w-full max-w-md">
           {/* Glassmorphism Card */}
-          <div className="chef-card rounded-3xl p-8 shadow-2xl border border-white/30 backdrop-blur-2xl bg-white/90">
+          <div className="pharaoh-card rounded-3xl p-8 shadow-2xl border border-white/10 backdrop-blur-2xl bg-obsidian-900/60">
             {/* Header with Logo and Brand */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full mb-4 shadow-lg border-4 border-white">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full mb-4 shadow-lg border-4 border-obsidian-900">
                 <img 
                   src={PharaohfolioLogo} 
                   alt="Pharaohfolio Logo" 
@@ -173,31 +173,31 @@ const Register = () => {
                 />
               </div>
               <div
-                className="font-extrabold text-3xl sm:text-4xl mb-2 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 bg-clip-text text-transparent font-chef drop-shadow-lg tracking-wide"
+                className="font-extrabold text-3xl sm:text-4xl mb-2 bg-gradient-to-r from-gold-300 via-gold-500 to-gold-600 bg-clip-text text-transparent font-chef drop-shadow-lg tracking-wide"
                 style={{
                   letterSpacing: '0.04em',
                   lineHeight: '1.1',
-                  textShadow: '0 2px 8px rgba(124,58,237,0.12)'
+                  textShadow: '0 2px 8px rgba(212,175,55,0.2)'
                 }}
               >
                 Pharaohfolio
               </div>
-              <p className="text-gray-500 text-sm mb-2">Simple Hosting for Single-Page Portfolios</p>
-              <h1 className="text-3xl font-bold font-chef text-gray-800 mb-2">
-                Join Our Kitchen!
+              <p className="text-gray-400 text-xs mb-2">Simple Hosting for Single-Page Portfolios</p>
+              <h1 className="text-3xl font-bold font-chef text-white mb-2">
+                Join Pharaohfolio!
               </h1>
-              <p className="text-gray-600 font-medium">
-                Create your account and start your AI-powered culinary adventure
+              <p className="text-gray-400 font-medium text-sm">
+                Create your account and start hosting your AI-generated portfolio
               </p>
             </div>
             {/* Error Message */}
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+              <div className="mb-6 p-4 bg-red-950/40 border border-red-900/50 rounded-xl">
                 <div className="flex items-center">
-                  <svg className="w-5 h-5 text-red-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-red-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                   </svg>
-                  <span className="text-red-700 font-medium text-sm">{error}</span>
+                  <span className="text-red-300 font-medium text-sm">{error}</span>
                 </div>
               </div>
             )}
@@ -205,7 +205,7 @@ const Register = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-400 mb-2">
                     Username
                   </label>
                   <div className="relative">
@@ -215,18 +215,18 @@ const Register = () => {
                       value={formData.username}
                       onChange={handleChange}
                       required
-                      className="chef-input pl-12"
+                      className="pharaoh-input pl-12"
                       placeholder="Choose a unique username"
                     />
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-400 mb-2">
                     Email Address
                   </label>
                   <div className="relative">
@@ -236,18 +236,18 @@ const Register = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="chef-input pl-12"
+                      className="pharaoh-input pl-12"
                       placeholder="Enter your email address"
                     />
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                       </svg>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-400 mb-2">
                     Password
                   </label>
                   <div className="relative">
@@ -257,18 +257,18 @@ const Register = () => {
                       value={formData.password}
                       onChange={handleChange}
                       required
-                      className="chef-input pl-12 pr-12"
+                      className="pharaoh-input pl-12 pr-12"
                       placeholder="Create a strong password"
                     />
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
                     </div>
                     <button
                       type="button"
                       onClick={ShowPassword}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-300 transition-colors"
                     >
                       {showPasswordState ? (
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -284,7 +284,7 @@ const Register = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-400 mb-2">
                     Confirm Password
                   </label>
                   <div className="relative">
@@ -294,18 +294,18 @@ const Register = () => {
                       value={formData.password2}
                       onChange={handleChange}
                       required
-                      className="chef-input pl-12 pr-12"
+                      className="pharaoh-input pl-12 pr-12"
                       placeholder="Confirm your password"
                     />
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
                     <button
                       type="button"
                       onClick={ShowPassword2}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-300 transition-colors"
                     >
                       {showPasswordState2 ? (
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -324,11 +324,11 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="chef-button bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="pharaoh-button text-obsidian-950 font-bold"
               >
                 {loading ? (
                   <div className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-obsidian-950" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -341,11 +341,11 @@ const Register = () => {
             </form>
             {/* Footer */}
             <div className="mt-8 text-center">
-              <p className="text-gray-600">
+              <p className="text-gray-400 text-sm">
                 Already have an account?{' '}
                 <Link 
                   to="/login" 
-                  className="text-purple-600 hover:text-purple-800 font-semibold transition-colors hover:underline"
+                  className="text-gold-400 hover:text-gold-300 font-semibold transition-colors hover:underline"
                 >
                   Sign In
                 </Link>
@@ -354,7 +354,7 @@ const Register = () => {
           </div>
           {/* Bottom decorative text */}
           <div className="text-center mt-8">
-            <p className="text-gray-500 text-sm font-medium">
+            <p className="text-gray-500 text-xs font-medium">
               👑 Pharaohfolio – Simple Hosting for Single-Page Portfolios 👑
             </p>
           </div>

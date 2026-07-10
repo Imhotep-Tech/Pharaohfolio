@@ -66,13 +66,13 @@ const PublicPortfolio = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 relative">
+    <div className="h-screen w-screen overflow-hidden bg-gray-100 relative">
       <iframe
         title={pageTitle}
         srcDoc={code}
         sandbox="allow-scripts"
-        className="w-full min-h-screen border-0"
-        style={{ minHeight: '100vh', width: '100%' }}
+        className="w-full h-full border-0"
+        style={{ height: '100vh', width: '100%', display: 'block' }}
       />
       <CopyrightFooter />
     </div>
